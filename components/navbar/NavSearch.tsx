@@ -28,7 +28,7 @@ export default function NavSearch() {
     } else {
       params.delete("search");
     }
-    replace(`${pathname}?${params.toString()}`); //Navigate back to home page with the final params that has been combined
+    replace(`/?${params.toString()}`); //Navigate back to home page with the final params that has been combined
   }, 300); //update the query parameters in the URL every 300ms.
   useEffect(() => {
     //Check if there anything in the URL parameter
