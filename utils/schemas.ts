@@ -15,18 +15,18 @@ export const profileSchema = z.object({
   }),
 });
 
-//Need more Info about these code
+//Validate Schema
 export function validateWithZodSchema<T>(
-  schema: ZodSchema<T>,
-  data: unknown
+  schema: ZodSchema<T>, // Zod schema to validate data against
+  data: unknown //The data to be validated
 ): T {
-  const result = schema.safeParse(data);
+  const result = schema.safeParse(data); // Attempt to parse and validate the data
   if (!result.success) {
-    const errors = result.error.errors.map((error) => error.message);
+    const errors = result.error.errors.map((error) => error.message); // Collect error messages
 
-    throw new Error(errors.join(", "));
+    throw new Error(errors.join(", ")); // Throw a new error with the joined error messages
   }
-  return result.data;
+  return result.data; // Return the validated data
 }
 
 export const imageSchema = z.object({
@@ -96,4 +96,11 @@ export const propertySchema = z.object({
     message: "bahts amount must be a positive number.",
   }),
   amenities: z.string(),
+});
+
+//Reviews instance
+export const createReviewSchema = z.object({
+  propertyId: z.string(),
+  rating: z.coerce.number().int().min(1).max(5), //Turn rating into number
+  comment: z.string().min(10).max(1000),
 });

@@ -2,6 +2,7 @@
 //**IMP**
 
 import {
+  createReviewSchema,
   imageSchema,
   profileSchema,
   propertySchema,
@@ -16,6 +17,7 @@ import { uploadImage } from "./supabase";
 
 //Give all user info
 const getAuthUser = async () => {
+  // currentUser() would internally call Clerk's backend to fetch the current authenticated user
   const user = await currentUser();
   if (!user) {
     throw new Error("You must be logged in to access this route");
@@ -29,6 +31,7 @@ const getAuthUser = async () => {
 const renderError = (error: unknown): { message: string } => {
   console.log(error);
   return {
+    //Check if error is an instance of the Error
     message: error instanceof Error ? error.message : "An error occured",
   };
 };
@@ -297,6 +300,156 @@ export const fetchPropertyDetails = async (id: string) => {
     //Include = get all of the properties of the profile
     include: {
       profile: true,
+      bookings: {
+        select: {
+          checkIn: true,
+          checkOut: true,
+        },
+      },
+    },
+  });
+};
+
+export const createReviewAction = async (
+  prevState: any,
+  formData: FormData //represent key-value pairs of form fields and their values
+) => {
+  //Get user info
+  const user = await getAuthUser();
+  try {
+    // Converts FormData to a plain JavaScript object
+    // In formData should have name="propertyId" : name="rating" :  name="comment" from the SubmitReview.tsx
+    const rawData = Object.fromEntries(formData);
+
+    //Validate the rawData against the createReviewSchema
+    const validatedFields = validateWithZodSchema(createReviewSchema, rawData);
+
+    await db.review.create({
+      data: {
+        ...validatedFields,
+        profileId: user.id,
+      },
+    });
+    revalidatePath(`/properties/${validatedFields.propertyId}`);
+    return { message: "Review submitted successfully" };
+  } catch (error) {
+    return renderError(error);
+  }
+};
+
+// Add Reviews to the list after the user submit the review
+export async function fetchPropertyReviews(propertyId: string) {
+  //Get reviews base on the propertyID
+  const reviews = await db.review.findMany({
+    // Only get the reviews PropertyId in db matches to the propertyId
+    where: {
+      propertyId,
+    },
+    select: {
+      id: true,
+      rating: true,
+      comment: true,
+      profile: {
+        select: {
+          firstName: true,
+          profileImage: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return reviews;
+}
+
+//Fetch based on the user ID
+export const fetchPropertyReviewsByUser = async () => {
+  const user = await getAuthUser();
+  //Get the reviews base on user id
+  const reviews = await db.review.findMany({
+    where: {
+      profileId: user.id,
+    },
+    select: {
+      id: true,
+      rating: true,
+      comment: true,
+      property: {
+        select: {
+          name: true,
+          image: true,
+        },
+      },
+    },
+  });
+  return reviews;
+};
+
+//Delete review base on the user id and review id
+export const deleteReviewAction = async (prevState: { reviewId: string }) => {
+  const { reviewId } = prevState;
+  const user = await getAuthUser();
+
+  try {
+    await db.review.delete({
+      where: {
+        id: reviewId,
+        profileId: user.id,
+      },
+    });
+    //To see the latest changes
+    revalidatePath("/reviews");
+    return { message: "Review deleted successfully" };
+  } catch (error) {
+    return renderError(error);
+  }
+};
+
+//Get the raiting for specific property
+export async function fetchPropertyRating(propertyId: string) {
+  //groupBy : use to group the reviews based on the propertyId for a snigle property
+  //Prisma will return an array with just one object that contains average rating and count data
+  // groupBy, _avg, and _count methods are features from Prisma
+  const result = await db.review.groupBy({
+    by: ["propertyId"],
+    //Calculates the average rating for the reviews of the property
+    _avg: {
+      rating: true,
+    },
+    //Counts the number of ratings (reviews) for the property
+    _count: {
+      rating: true,
+    },
+    //Filters the reviews to only retrieve reviews for the specific property passed into the function
+    where: {
+      propertyId,
+    },
+  });
+
+  // empty array if no reviews
+  return {
+    //Average rating of the property
+    //result[0]?._avg.rating: Accesses the average rating from the first (and usually only) result in the result array.
+    //.toFixed(1): Formats the average rating to one decimal place.
+    // ?? 0: If the average rating is null or undefined, it defaults to 0.
+    rating: result[0]?._avg.rating?.toFixed(1) ?? 0,
+    //The total number of reviews for the property
+    //result[0]?._count.rating: Accesses the count of ratings from the first (and usually only) result in the result array.
+    //?? 0: If the count is null or undefined, it defaults to 0.
+    count: result[0]?._count.rating ?? 0,
+  };
+}
+
+//To check whether the user has already left the review
+export const findExistingReview = async (
+  userId: string,
+  propertyId: string
+) => {
+  return db.review.findFirst({
+    where: {
+      profileId: userId,
+      propertyId: propertyId,
     },
   });
 };

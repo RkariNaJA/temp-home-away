@@ -26,6 +26,8 @@ model Profile {
   updatedAt    DateTime   @updatedAt
   properties Property[] //one to many relationship ; one user can create many Properties
   favorites    Favorite[] //one to many relationship ; one user can create many favorites
+  reviews Review[] //one to many relationship ; one user can create many Review
+  bookings Booking[]
 }
 
 model Property {
@@ -46,7 +48,9 @@ model Property {
   updatedAt   DateTime   @updatedAt
   profile     Profile    @relation(fields: [profileId], references: [clerkId], onDelete: Cascade) //Each property is associated with only one profile
   profileId   String
-  favorites    Favorite[]
+  favorites    Favorite[] //Each favorites is associated with only one profile
+  reviews Review[] //Each reviews is associated with only one profile
+  bookings Booking[]
 }
 
 
@@ -61,5 +65,34 @@ model Favorite {
 
   property   Property  @relation(fields: [propertyId], references: [id], onDelete: Cascade)
   propertyId String
+  
+}
 
+
+
+model Review {
+  id        String   @id @default(uuid())
+  profile   Profile  @relation(fields: [profileId], references: [clerkId], onDelete: Cascade)
+  profileId String
+  property   Property  @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId String
+  rating    Int
+  comment   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Booking {
+  id        String   @id @default(uuid())
+  profile   Profile  @relation(fields: [profileId], references: [clerkId], onDelete: Cascade)
+  profileId String
+  property   Property  @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId String
+  orderTotal     Int
+  totalNights    Int
+  checkIn   DateTime
+  checkOut  DateTime
+  paymentStatus Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
