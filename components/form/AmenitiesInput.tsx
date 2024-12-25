@@ -8,18 +8,33 @@ export default function AmenitiesInput({
 }: {
   defaultValue?: Amenity[];
 }) {
+  // The icon is not saved in database
+  //defaultValue = property.amenities : amenities that were saved in database with no icon
+  //amenities = Amenity[] that havent been saved in database with icon
+  const amenitiesWithIcons = defaultValue?.map(({ name, selected }) => ({
+    name,
+    selected,
+    //To match the name of amenities and the name of property.amenities to get the icon
+    icon: amenities.find((amenity) => amenity.name === name)!.icon, //The result will always be non-null
+  }));
+
   const [selectedAmenities, setSelectedAmenities] = useState<Amenity[]>(
-    defaultValue || amenities
+    amenitiesWithIcons || amenities
   );
 
   //Toggle the check box for each Amenity
   /***********/
   const handleChange = (amenity: Amenity) => {
     setSelectedAmenities((prev) => {
+      //Represents the list of amenities
       return prev.map((a) => {
+        //This means you want to toggle the selected state of that amenity
         if (a.name === amenity.name) {
+          //Done by creating a new object with the spread operator and then toggling the selected property (selected: !a.selected).
+          //!a.selected: negates the current selected state. If it was true, it becomes false
           return { ...a, selected: !a.selected };
         }
+        //If the name doesn’t match, it simply returns the original amenity a without any modification
         return a;
       });
     });

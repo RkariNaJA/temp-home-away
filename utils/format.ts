@@ -14,3 +14,18 @@ export const formatCurrency = (amount: number | null) => {
 export function formatQuantity(quantity: number, noun: string): string {
   return quantity === 1 ? `${quantity} ${noun}` : `${quantity} ${noun}s`;
 }
+
+//For check-in and check-out in the booking page (EX: Result: july 10, 2024)
+export const formatDate = (date: Date, onlyMonth?: boolean) => {
+  //Intl.DateTimeFormatOptions: used to specify options for formatting a Date
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+  };
+
+  if (!onlyMonth) {
+    options.day = "numeric";
+  }
+  //.format() :  formats the provided date according to those options.
+  return new Intl.DateTimeFormat("en-US", options).format(date);
+};

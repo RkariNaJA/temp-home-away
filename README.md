@@ -6015,6 +6015,7 @@ import {
   EmbeddedCheckout,
 } from "@stripe/react-stripe-js";
 
+//Communicate with strioe
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
 );

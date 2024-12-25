@@ -15,16 +15,26 @@ import Amenities from "@/components/properties/Amenities";
 import SubmitReview from "@/components/reviews/SubmitReview";
 import PropertyReviews from "@/components/reviews/PropertyReviews";
 import { auth } from "@clerk/nextjs/server";
-// import { DynamicaPropertyMap } from "@/components/properties/DynamicMap";
-// import dynamic from "next/dynamic";
-// import { Skeleton } from "@/components/ui/skeleton";
+import DynamicBookingWrapper from "@/components/Dynamic/DynamicBooking";
 
-/*Got an Error on SSR:false*/
+/*Got an Error on 'Map container is already initialized.'*/
+//Fixed SSR Error by move the code into the @components/Dynamic/DynamicMap.tsx
+
 // const DynamicMap = dynamic(
 //   () => import("@/components/properties/PropertyMap"),
 //   {
 //     ssr: false,
 //     loading: () => <Skeleton className="h-[400px] w-full" />,
+//   }
+// );
+
+//Fixed SSR Error by move the code into the @components/Dynamic/DynamicBooking.tsx
+
+// const DynamicBookingWrapper = dynamic(
+//   () => import("@/components/booking/BookingWrapper"),
+//   {
+//     ssr: false,
+//     loading: () => <Skeleton className="h-[200px] w-full" />,
 //   }
 // );
 
@@ -75,6 +85,11 @@ async function PropertyDetailsPage({ params }: { params: { id: string } }) {
         <div className="lg:col-span-4 flex flex-col items-center">
           {/* calendar */}
           {/* <BookingCalendar /> */}
+          <DynamicBookingWrapper
+            propertyId={property.id}
+            price={property.price}
+            bookings={property.bookings}
+          />
         </div>
       </section>
       {reviewDoesNotExist && <SubmitReview propertyId={property.id} />}

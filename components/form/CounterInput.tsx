@@ -19,6 +19,7 @@ export default function CounterInput({
   };
   const decreaseCount = () => {
     setCount((prevCount) => {
+      //To unable the value to go under 0
       if (prevCount > 0) {
         return prevCount - 1;
       }
