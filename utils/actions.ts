@@ -796,3 +796,34 @@ export const fetchChartsData = async () => {
   }, [] as Array<{ date: string; count: number }>);
   return bookingsPerMonth;
 };
+
+//User for generating summary statistics on a user's property management and bookings.
+export const fetchReservationStats = async () => {
+  const user = await getAuthUser(); //get user info
+
+  //Total count of properties where profileId matches the user.id
+  const properties = await db.property.count({
+    where: {
+      profileId: user.id,
+    },
+  });
+
+  //calculate the sum of the orderTotal and totalNights fields.
+  const totals = await db.booking.aggregate({
+    _sum: {
+      orderTotal: true,
+      totalNights: true,
+    },
+    //filters the bookings where (property.profileId equals user.id)
+    where: {
+      property: {
+        profileId: user.id,
+      },
+    },
+  });
+  return {
+    properties, //The total number of properties managed by the user.
+    nights: totals._sum.totalNights || 0, //The total number of nights booked across all the user's properties.
+    amount: totals._sum.orderTotal || 0, //The total order amount (revenue) from bookings
+  };
+};
