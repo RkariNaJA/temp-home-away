@@ -1,13 +1,26 @@
 ### To Run This App
 
-```sh
+You need to set up .env and .env.local
 
-You need to set-up .env and .env.local
-```
+### Setting up in .env
 
-```sh
-npm run dev
-```
+- DB_PASSWORD
+- DATABASE_URL
+- DIRECT_URL
+- SUPABASE_URL
+- SUPABASE_KEY
+- ADMIN_USER_ID
+- NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+- STRIPE_SECRET_KEY
+
+### Setting up in .env.local
+
+- NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+- CLERK_SECRET_KEY
+- NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL
+- NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL
+- NEXT_PUBLIC_WEBSITE_URL
+
 
 ### These are the steps you can follow to create this demo app from scratch
 
