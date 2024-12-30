@@ -1,5 +1,6 @@
 ### To Run This App
 
+npm i --force if you can't npm i properly
 You need to set up .env and .env.local
 
 ### Setting up in .env
