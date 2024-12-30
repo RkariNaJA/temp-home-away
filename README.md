@@ -1,13 +1,15 @@
-### Next App
+### To Run This App
 
 ```sh
 
-npx create-next-app@14 home-away
+You need to set-up .env and .env.local
 ```
 
 ```sh
 npm run dev
 ```
+
+### These are the steps you can follow to create this demo app from scratch
 
 ### Remove Boilerplate
 
