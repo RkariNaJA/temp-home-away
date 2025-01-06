@@ -30,7 +30,7 @@ Home page
 
 ![image](https://github.com/user-attachments/assets/d99770db-83b5-4277-b33a-fdfc07bbcc4d)
 
-Sign-up system
+Sign-up/Sign-in system
 
 ![image](https://github.com/user-attachments/assets/511675e4-92af-4fb0-9c8f-51a4fd25438a)
 
