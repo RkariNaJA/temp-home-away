@@ -46,7 +46,7 @@ Admin system for tracking data
 
 ![image](https://github.com/user-attachments/assets/3e136cbb-ddd9-463b-a47c-64f651015bbb)
 
-My Rental page (Properties that user own will be display in this page)
+My Rental page (Properties that the user owns will be displayed on this page)
 
 ![image](https://github.com/user-attachments/assets/bbfde11d-a5be-4c9f-abfd-bae0d9aeafe5)
 
@@ -59,7 +59,7 @@ Reservations page
 
 ![image](https://github.com/user-attachments/assets/6fd4471a-60cb-4918-8d1c-5515adf69bbd)
 
-Booking page (Result after completing a booking)
+Booking page (Result of completing a booking)
 
 ![image](https://github.com/user-attachments/assets/9713196a-dbdd-4bda-9339-e6bc4559673e)
 
