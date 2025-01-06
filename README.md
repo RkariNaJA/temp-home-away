@@ -46,7 +46,7 @@ Admin system for tracking data
 
 ![image](https://github.com/user-attachments/assets/3e136cbb-ddd9-463b-a47c-64f651015bbb)
 
-My Rental page
+My Rental page (Properties that user own will be display in this page)
 
 ![image](https://github.com/user-attachments/assets/bbfde11d-a5be-4c9f-abfd-bae0d9aeafe5)
 
