@@ -1,3 +1,5 @@
+### This project is about building homestays website from scratch
+
 ### To Run This App
 
 npm i --force if you can't npm i properly
