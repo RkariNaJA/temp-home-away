@@ -1,4 +1,13 @@
-### This project is about building homestays website from scratch
+### This project is about building homestays website from scratch using
+
+-Next.js14+
+-Typescript
+-ClerkAuth
+-Prisma
+-Supabase
+-Tailwind
+-Shadcn-ui
+-Zod
 
 ### To Run This App
 
